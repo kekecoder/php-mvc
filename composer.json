@@ -1,0 +1,20 @@
+{
+    "name": "u0_a239/php-mvc",
+    "autoload": {
+        "psr-4": {
+            "U0A239\\PhpMvc\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "kekecoder",
+            "email": "abimbola.felix@gmail.com"
+        }
+    ],
+    "autoload":{
+      "psr-4":{
+       "app\\": "./"
+      }
+    },
+    "require": {}
+}
