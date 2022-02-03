@@ -8,8 +8,8 @@
     <input type="email" class="form-control" name="email">
   </div>
   <div class="form-group">
-    <label for="subject">body</label>
-    <textarea class="form-control" name="subject"></textarea>
+    <label for="subject">Body</label>
+    <textarea class="form-control" name="body"></textarea>
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
