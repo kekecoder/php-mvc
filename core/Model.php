@@ -31,13 +31,25 @@ abstract class Model{
       if($ruleName === self::RULES_EMAIL && !filter_var($value, FILTER_VALIDATE_EMAIL)){
         $this->addError($attribute, self::RULES_EMAIL);
       }
+      if($ruleName === self::RULES_MIN && strlen($value) < $rule['min']){
+        $this->addError($attribute, self::RULES_MIN, $rule);
+      }
+      if($ruleName === self::RULES_MAX && strlen($value) > $rule['max']){
+        $this->addError($attribute, self::RULES_MAX, $rule);
+      }
+      if($ruleName === self::RULES_MATCH && $value !== $this->{$rule['match']}){
+        $this->addError($attribute, self::RULES_MATCH, $rule);
+      }
       }
     }
     return empty($this->errors);
   }
   
-  public function addError(string $attribute, string $rule){
+  public function addError(string $attribute, string $rule, $params = []){
     $messages = $this->errorMessages()[$rule] ?? "";
+    foreach ($params as $key => $value){
+      $messages = str_replace("{{$key}}", $value, $messages);
+    }
     $this->errors[$attribute][] = $messages; 
   }
   
@@ -45,8 +57,8 @@ abstract class Model{
     return [
       self::RULES_REQUIRED => "This field is required",
       self::RULES_EMAIL => "This email must be a valid format",
-      self::RULES_MIN => "min length of this field must be {min}",
-      self::RULES_MAX => "max length of this field must be {max}",
+      self::RULES_MIN => "The length of this field must not be less than {min}",
+      self::RULES_MAX => "The length of this field must not be greater than {max}",
       self::RULES_MATCH => "This field must match {match}"
       ];
   }
