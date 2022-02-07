@@ -4,7 +4,7 @@
     <div class="col">
       <div class="form-group">
         <label for="">First Name</label>
-        <input type="text" name="firstname" class="form-control">
+        <input type="text" name="firstname" class="form-control" value="<?php echo $model->firstname?>">
       </div>
     </div>
     <div class="col">
