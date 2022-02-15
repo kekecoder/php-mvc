@@ -3,7 +3,6 @@
 namespace app\core;
 
 use PDO;
-use Exception;
 
 class Database{
     public PDO $pdo;
@@ -32,9 +31,9 @@ class Database{
             $className = pathinfo($migration, PATHINFO_FILENAME);
 
             $instance = new $className();
-            echo "Applying migration $migration" . PHP_EOL;
+            $this->log("Applying migration $migration" . "\n");
             $instance->up();
-            echo "Applied migration $migration" . PHP_EOL;
+            $this->log("Applied migration $migration" . "\n");
 
             $newMigrations[] = $migration;
         }
@@ -42,7 +41,7 @@ class Database{
         if(!empty($newMigrations)){
             $this->saveMigartions($newMigrations);
         }else{
-            echo "All migrations are applied" . "\n";
+            $this->log("All migrations are applied" . "\n");
         }
     }
 
@@ -68,6 +67,10 @@ class Database{
         ");
 
         $statment->execute();
+    }
+
+    protected function log($message){
+        echo '[' . date('Y-m-d H:i:s') . '] - ' . $message . PHP_EOL;
     }
 
 }
