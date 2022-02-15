@@ -20,7 +20,7 @@ class Application
     $this->request = new Request();
     $this->response = new Response();
     $this->router = new Router($this->request, $this->response);
-    $this->db = new Database($config['db']);
+    $this->db = new Database($config['db'], $this->request, $this->response);
   }
   
   public function run()
