@@ -8,6 +8,7 @@ abstract class Model
     public const RULES_MIN = 'min';
     public const RULES_MAX = 'max';
     public const RULES_MATCH = 'match';
+    public const RULES_UNIQUE = 'unique';
 
     public function loadData($data)
     {
@@ -45,6 +46,21 @@ abstract class Model
                 if ($ruleName === self::RULES_MATCH && $value !== $this->{$rule['match']}) {
                     $this->addError($attribute, self::RULES_MATCH, $rule);
                 }
+                if($ruleName === self::RULES_UNIQUE){
+                    $className = $rule['class'];
+                    $uniqueAttr = $rule['attribute'] ?? $attribute;
+                    $tableName = $className::tableName();
+
+                    $statment = Application::$app->db->prepare("SELECT  * FROM $tableName WHERE $uniqueAttr = :attr");
+                    $statment->bindValue(":attr", $value);
+
+                    $statment->execute();
+                    $record = $statment->fetchObject();
+
+                    if($record){
+                        $this->addError($attribute, self::RULES_UNIQUE, ['field' => $attribute]);
+                    }
+                }
             }
         }
         return empty($this->errors);
@@ -67,6 +83,7 @@ abstract class Model
             self::RULES_MIN => "The length of this field must not be less than {min}",
             self::RULES_MAX => "The length of this field must not be greater than {max}",
             self::RULES_MATCH => "This field must match {match}",
+            self::RULES_UNIQUE => "Record with this {field} already exists",
         ];
     }
 
